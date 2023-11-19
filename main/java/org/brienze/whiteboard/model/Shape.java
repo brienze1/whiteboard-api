@@ -14,6 +14,7 @@ public class Shape {
     @JsonProperty("id")
     @DynamoDBHashKey(attributeName = "id")
     private UUID id;
+    @JsonProperty("whiteboard_name")
     @DynamoDBIndexHashKey(attributeName = "whiteboard_name", globalSecondaryIndexName = "whiteboard-name-idx")
     private String whiteboardName;
     @JsonProperty("type")
