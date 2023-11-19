@@ -1,2 +1,11 @@
-spring.mvc.view.prefix: /WEB-INF/jsp/
-spring.mvc.view.suffix: .jsp
+aws.region: eu-west-2
+
+management:
+  endpoint:
+    health:
+      show-details: "ALWAYS"
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+

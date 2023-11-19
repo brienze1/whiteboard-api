@@ -1,0 +1,28 @@
+version: "3.3"
+
+services:
+
+  localstack:
+    container_name: whiteboard-api-localstack
+    image: localstack/localstack
+    ports:
+      - '4566:4566'
+    environment:
+      - EDGE_PORT=4566
+      - SERVICES=cloudformation,dynamodb
+      - DEBUG=1
+    volumes:
+      - ./scripts/localstack:/docker-entrypoint-initaws.d
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  awscli:
+    container_name: whiteboard-api-aws-cli
+    image: amazon/aws-cli:latest
+    volumes:
+      - ./scripts/localstack:/init-scripts/localstack
+      - ./scripts/whiteboard-api:/init-scripts/whiteboard-api
+      - ./cloudformation:/cloudformation
+    entrypoint: >
+      sh -c "sh /init-scripts/localstack/01-profile-creation.sh && 
+      sh /init-scripts/whiteboard-api/01-wait-for-localstack.sh && 
+      sh /init-scripts/whiteboard-api/02-resources-creation.sh"
