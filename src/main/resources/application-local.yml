@@ -1,0 +1,15 @@
+aws:
+  access_key: default_access_key
+  secret_key: default_secret_key
+  region: eu-west-2
+  url: http://localhost:4566/
+
+management:
+  endpoint:
+    health:
+      show-details: "ALWAYS"
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
