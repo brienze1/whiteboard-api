@@ -86,22 +86,19 @@
     </dependencies>
 
     <build>
-        <sourceDirectory>main/java</sourceDirectory>
+        <sourceDirectory>src/main/java</sourceDirectory>
 
         <plugins>
-
             <!-- Build jar -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <skip>false</skip>
-                    <mainClass>org.brienze.whiteboard-api.Application</mainClass>
+                    <mainClass>org.brienze.whiteboard.Application</mainClass>
                     <layout>JAR</layout>
-                    <finalName>whiteboard-${project.version}</finalName>
+                    <finalName>whiteboard-api-${project.version}</finalName>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 

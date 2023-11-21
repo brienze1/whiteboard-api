@@ -26,14 +26,18 @@ public class StateController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody State state) {
+    public ResponseEntity<?> create(@RequestHeader(name = "application-id", required = false) Integer applicationId, @RequestBody State state) {
+        System.out.println("Create state called, application id: " + applicationId);
+
         return statePersistence.getByName(state.getName())
                                .map(value -> ResponseEntity.status(HttpStatus.OK).body(value))
                                .orElseGet(() -> ResponseEntity.status(HttpStatus.CREATED).body(statePersistence.save(state)));
     }
 
     @PostMapping("/{name}/clear")
-    public ResponseEntity<?> clear(@PathVariable("name") String name) {
+    public ResponseEntity<?> clear(@RequestHeader(name = "application-id", required = false) Integer applicationId, @PathVariable("name") String name) {
+        System.out.println("Clear state called, application id: " + applicationId);
+
         shapePersistence.deleteAllByName(name);
 
         Optional<State> state = statePersistence.getByName(name);

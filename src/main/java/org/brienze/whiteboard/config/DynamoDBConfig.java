@@ -15,10 +15,13 @@ import org.springframework.context.annotation.Configuration;
 public class DynamoDBConfig {
 
     @Bean
-    public AmazonDynamoDB dynamoDbClient(@Value("${aws.region}") String region) {
-        BasicAWSCredentials awsCredentials = new BasicAWSCredentials("default_access_key", "default_secret_key");
+    public AmazonDynamoDB dynamoDbClient(@Value("${aws.access_key}") String accessKey,
+                                         @Value("${aws.secret_key}") String secretKey,
+                                         @Value("${aws.url}") String url,
+                                         @Value("${aws.region}") String region) {
+        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
         return AmazonDynamoDBClientBuilder.standard()
-                                          .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("http://localhost:4566/", region))
+                                          .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(url, region))
                                           .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                                           .build();
     }

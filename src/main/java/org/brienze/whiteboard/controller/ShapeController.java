@@ -24,7 +24,9 @@ public class ShapeController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@PathVariable("name") String name, @RequestBody Shape shape) {
+    public ResponseEntity<?> create(@RequestHeader(name = "application-id", required = false) Integer applicationId, @PathVariable("name") String name, @RequestBody Shape shape) {
+        System.out.println("Create shape called, application id: " + applicationId);
+
         Optional<State> existingState = statePersistence.getByName(name);
 
         if (existingState.isPresent()) {
