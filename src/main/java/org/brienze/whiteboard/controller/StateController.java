@@ -1,5 +1,6 @@
 package org.brienze.whiteboard.controller;
 
+import com.amazonaws.Response;
 import org.brienze.whiteboard.model.Shape;
 import org.brienze.whiteboard.model.State;
 import org.brienze.whiteboard.persistence.ShapePersistence;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/whiteboards")
@@ -42,6 +44,24 @@ public class StateController {
 
         Optional<State> state = statePersistence.getByName(name);
         if (state.isPresent()) {
+            state.get().setCleanedAt(LocalDateTime.now());
+
+            return ResponseEntity.status(HttpStatus.OK).body(statePersistence.save(state.get()));
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "State not found"));
+
+    }
+
+    @DeleteMapping("/{name}/undo/{lastKey}")
+    public ResponseEntity<?> undo(@RequestHeader(name = "application-id", required = false) Integer applicationId,
+                                  @PathVariable("name") String name, @PathVariable("lastKey") UUID lastKey) {
+        System.out.println("Undo state called, application id: " + applicationId);
+
+        shapePersistence.deleteLast(name, lastKey);
+
+        Optional<State> state = statePersistence.getByName(name);
+        if(state.isPresent()) {
             state.get().setCleanedAt(LocalDateTime.now());
 
             return ResponseEntity.status(HttpStatus.OK).body(statePersistence.save(state.get()));
