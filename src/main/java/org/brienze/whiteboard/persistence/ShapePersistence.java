@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 @Component
 public class ShapePersistence {
@@ -41,6 +42,18 @@ public class ShapePersistence {
 
         for (Shape shape : shapes) {
             dynamoDBMapper.delete(shape);
+        }
+    }
+
+    public void deleteLast(String name, UUID lastKey) {
+        Set<Shape> shapes = findAllByName(name);
+
+        for (Shape shape: shapes) {
+            if (shape.getId().equals(lastKey)) {
+                System.out.println("Deleting " + shape.getType());
+                dynamoDBMapper.delete(shape);
+                break;
+            }
         }
     }
 }
